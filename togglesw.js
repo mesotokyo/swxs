@@ -14,6 +14,8 @@ this._POSITION = { // スイッチポジションを表現する定数
   BOTTOM: 3,
   LEFT: 4,
 };
+this._ledColor = [0.0, 0.0, 0.0, 0.0]; // LEDの色
+this._ledBorderColor = [0.5, 0.5, 0.5, 1.0]; // LEDの色
 this._MAX_STATE = 4; // スイッチの状態の最大数
 
 this._inactiveColor = [0.5, 0.5, 0.5, 1.0]; // スイッチオフの場合の色（RGBA）
@@ -85,6 +87,13 @@ function draw() {
          0.0, -0.9, 0.0,
          -0.3, -0.4, 0.0);
 
+  // LEDを描画
+  sk.moveto(0.7, 0.7, 0.0);
+  sk.glcolor.apply(sk, this._ledColor);
+  sk.circle(0.18);
+  sk.glcolor.apply(sk, this._borderColor);
+  sk.framecircle(0.18);
+  
   // 描画を反映させる
   this.refresh();
 }
@@ -146,6 +155,16 @@ function set(val) {
     return;
   }
   this._state = val;
+  draw();
+}
+
+// "led"メッセージを受け取った時に実行される関数
+function led(r, g, b, a) {
+  r = r || 0.0;
+  g = g || 0.0;
+  b = b || 0.0;
+  a = a || 0.0;
+  this._ledColor = [r, g, b, a];
   draw();
 }
 
